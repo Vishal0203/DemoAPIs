@@ -3,6 +3,7 @@ package com.codealong.demoapis.bootstrap;
 import com.codealong.demoapis.domains.Color;
 import com.codealong.demoapis.services.ColorService;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.apache.tomcat.util.buf.StringUtils;
@@ -17,8 +18,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 @Component
 public class BootstrapData implements CommandLineRunner {
@@ -42,21 +41,20 @@ public class BootstrapData implements CommandLineRunner {
         Resource resource = new ClassPathResource("json/colors.json");
         InputStream stream = resource.getInputStream();
         InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
-        JsonObject jsonObject = gson.fromJson(reader, JsonObject.class);
-        Set<Map.Entry<String, JsonElement>> entrySet = jsonObject.entrySet();
+        JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
 
-        for (Map.Entry<String, JsonElement> entry : entrySet) {
-            JsonObject colorObject = entry.getValue().getAsJsonObject();
-            String colorName = colorObject.get("name").getAsString();
-            String colorHex = colorObject.get("hex").getAsString().substring(1);
-            List<String> rgbValues = new ArrayList<>();
+        for (JsonElement color : jsonArray) {
+            JsonObject colorObject = color.getAsJsonObject();
+            String name = colorObject.get("name").getAsString();
+            String hex = colorObject.get("hex").getAsString();
+            List<String> rgbArray = new ArrayList<>();
+
             for (JsonElement val : colorObject.get("rgb").getAsJsonArray()) {
-                rgbValues.add(val.getAsString());
+                rgbArray.add(val.getAsString());
             }
-            String colorRgb = StringUtils.join(rgbValues);
 
-            Color color = new Color(colorHex, colorName, colorRgb);
-            colorList.add(color);
+            String rgb = StringUtils.join(rgbArray);
+            colorList.add(new Color(hex, name, rgb));
         }
 
         return colorList;

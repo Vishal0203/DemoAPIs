@@ -4,6 +4,8 @@ import com.codealong.demoapis.domains.Color;
 import com.codealong.demoapis.services.ColorService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Locale;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/colors")
@@ -16,7 +18,7 @@ public class ColorController {
 
     @GetMapping("/hex/{hexCode}")
     public Color getByHexCode(@PathVariable String hexCode) {
-        return colorService.getColorByHexCode(hexCode);
+        return colorService.getColorByHexCode(hexCode.toUpperCase(Locale.ROOT));
     }
 
     @GetMapping("/rgb/{rgbCode}")
