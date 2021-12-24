@@ -5,7 +5,6 @@ import com.codealong.demoapis.repositories.ColorRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ColorService {
@@ -13,6 +12,10 @@ public class ColorService {
 
     public ColorService(ColorRepository colorRepository) {
         this.colorRepository = colorRepository;
+    }
+
+    public List<Color> getAll() {
+        return colorRepository.findAll();
     }
 
     public List<Color> saveAll(List<Color> colorList) {

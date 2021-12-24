@@ -4,6 +4,7 @@ import com.codealong.demoapis.domains.Color;
 import com.codealong.demoapis.services.ColorService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Locale;
 
 @RestController
@@ -14,6 +15,11 @@ public class ColorController {
 
     public ColorController(ColorService colorService) {
         this.colorService = colorService;
+    }
+
+    @GetMapping({"", "/"})
+    public List<Color> getAll() {
+        return colorService.getAll();
     }
 
     @GetMapping("/hex/{hexCode}")
